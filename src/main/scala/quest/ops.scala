@@ -3,7 +3,8 @@ package quest
 extension [T](in: T) {
 
   /**
-   * Return the the success value or throw using EarlyExit. Must be used inside a quest block
+   * Return the the success value or return the quest-block with the error value.
+   * Must be used inside a quest block
    */
   inline def ?[F, S](using support: QuestionOperatorSupport.Aux[T, F, S], resulting: Resulting[F]): S = {
     support.getOrEarlyExit(in)
