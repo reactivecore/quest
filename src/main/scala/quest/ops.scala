@@ -5,7 +5,7 @@ extension [T](in: T) {
   /**
    * Return the the success value or throw using EarlyExit. Must be used inside a quest block
    */
-  inline def ?[S](using r: Resulting[T], support: QuestionOperatorSupport.Aux[T, S]): S = {
+  inline def ?[F, S](using support: QuestionOperatorSupport.Aux[T, F, S], resulting: Resulting[F]): S = {
     support.getOrEarlyExit(in)
   }
 }
@@ -26,6 +26,6 @@ inline def quest[T](f: Resulting[T] ?=> T): T = {
  * Immediately return the [[quest]] method returning value.
  * You can also use `return`, but this doesn't always works in closures.
  * */
-inline def bail[T: Resulting](value: T)(using support: QuestionOperatorSupport.Aux[T, _]): Nothing = {
+inline def bail[T: Resulting](value: T)(using support: QuestionOperatorSupport.Aux[T, _, _]): Nothing = {
   support.earlyExit(value)
 }

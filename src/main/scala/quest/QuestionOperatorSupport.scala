@@ -9,6 +9,9 @@ trait QuestionOperatorSupport[-T] {
   /** Success type. */
   type Success
 
+  /** Failure Type. */
+  type Failure
+
   /** Split some result into sucess or failure. */
   def decodeSuccess[X <: T](result: X): Option[Success]
 
@@ -27,12 +30,14 @@ trait QuestionOperatorSupport[-T] {
 }
 
 object QuestionOperatorSupport {
-  type Aux[T, S] = QuestionOperatorSupport[T] {
+  type Aux[T, F, S] = QuestionOperatorSupport[T] {
+    type Failure = F
     type Success = S
   }
 
-  given forEither[L, R]: QuestionOperatorSupport.Aux[Either[L, R], R] =
+  given forEither[L, R]: QuestionOperatorSupport.Aux[Either[L, R], Left[L, Nothing], R] =
     new QuestionOperatorSupport[Either[L, R]] {
+      override type Failure = Left[L,Nothing]
       override type Success = R
 
       override def decodeSuccess[X <: Either[L, R]](result: X): Option[R] = {
@@ -40,8 +45,9 @@ object QuestionOperatorSupport {
       }
     }
 
-  given forOption[T]: QuestionOperatorSupport.Aux[Option[T], T] = {
+  given forOption[T]: QuestionOperatorSupport.Aux[Option[T], None.type, T] = {
     new QuestionOperatorSupport[Option[T]] {
+      override type Failure = None.type
       override type Success = T
 
       override def decodeSuccess[X <: Option[T]](result: X): Option[T] = {
