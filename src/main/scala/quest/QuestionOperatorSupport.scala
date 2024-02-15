@@ -30,7 +30,7 @@ object QuestionOperatorSupport {
   type Aux[T, S] = QuestionOperatorSupport[T] {
     type Success = S
   }
-  
+
   given forEither[L, R]: QuestionOperatorSupport.Aux[Either[L, R], R] =
     new QuestionOperatorSupport[Either[L, R]] {
       override type Success = R
