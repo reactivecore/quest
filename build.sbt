@@ -1,3 +1,5 @@
+import xerial.sbt.Sonatype.GitHubHosting
+
 ThisBuild / scalaVersion := "3.3.1"
 
 ThisBuild / organization := "net.reactivecore"
@@ -13,27 +15,22 @@ val artefactVersion = versionTag.getOrElse(snapshotVersion)
 ThisBuild / version := artefactVersion
 
 
-val publishSettings = Seq(
-  publishTo           := {
-    val nexus = "https://sonatype.rcxt.de/repository/reactivecore/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus)
-    else
-      Some("releases" at nexus)
-  },
-  publishMavenStyle   := true,
-  credentials += {
-    for {
-      username <- sys.env.get("SONATYPE_USERNAME")
-      password <- sys.env.get("SONATYPE_PASSWORD")
-    } yield {
-      Credentials("Sonatype Nexus Repository Manager", "sonatype.rcxt.de", username, password)
-    }
-  }.getOrElse(
-    Credentials(Path.userHome / ".sbt" / "sonatype.rcxt.de.credentials")
+def publishSettings = Seq(
+  publishTo               := sonatypePublishToBundle.value,
+  sonatypeBundleDirectory := (ThisBuild / baseDirectory).value / "target" / "sonatype-staging" / s"${version.value}",
+  licenses                := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  homepage                := Some(url("https://github.com/reactivecore/quest")),
+  sonatypeProjectHosting  := Some(GitHubHosting("reactivecore", "quest", "contact@reactivecore.de")),
+  developers              := List(
+    Developer(
+      id = "nob13",
+      name = "Norbert Schultz",
+      email = "norbert.schultz@reactivecore.de",
+      url = url("https://www.reactivecore.de")
+    )
   ),
-  publish / test      := {},
-  publishLocal / test := {}
+  publish / test          := {},
+  publishLocal / test     := {}
 )
 
 usePgpKeyHex("77D0E9E04837F8CBBCD56429897A43978251C225")
