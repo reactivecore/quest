@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.3.2"
+ThisBuild / scalaVersion := "3.3.1"
 
 ThisBuild / organization := "net.reactivecore"
 

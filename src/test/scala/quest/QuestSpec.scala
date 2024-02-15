@@ -1,6 +1,6 @@
 package quest
 
-class EarlyExitSpec extends TestBase {
+class QuestSpec extends TestBase {
 
   it should "work in a simple case" in {
     val a: Option[Int] = Some(3)
