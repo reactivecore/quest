@@ -4,6 +4,12 @@ This small library introduces a Rust like `?`-Operator for Scala 3.
 
 ## Example
 
+
+```scala
+// Add to build.sbt
+libraryDependencies += "net.reactivecore" %% "quest" % <Version>
+```
+
 ```scala
 import quest.*
 
