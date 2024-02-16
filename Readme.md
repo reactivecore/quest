@@ -1,6 +1,6 @@
-# Rust like Question Operator for Scala 3
+# Rust-like Question Operator for Scala 3
 
-This small library introduces a Rust like `?`-Operator for Scala 3.
+This small library introduces a Rust-like `?`-Operator for Scala 3.
 
 ## Example
 
