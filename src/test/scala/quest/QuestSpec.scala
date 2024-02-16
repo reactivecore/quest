@@ -14,7 +14,7 @@ class QuestSpec extends TestBase {
   }
 
   it should "support either" in {
-    val a: Either[String, Int] = Right(23)
+    val a: Either[String, Int]     = Right(23)
     val b: Either[String, Boolean] = Left("Bad")
 
     quest {
@@ -24,8 +24,9 @@ class QuestSpec extends TestBase {
   }
 
   it should "support either (success case with diverging error codes)" in {
-    val a: Either[String, Int] = Right(23)
+    val a: Either[String, Int]     = Right(23)
     val b: Either[String, Boolean] = Right(true)
+
     val res = quest {
       val x = a.?
       val y = b.?

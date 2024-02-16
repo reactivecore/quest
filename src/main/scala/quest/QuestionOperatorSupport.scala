@@ -24,13 +24,13 @@ object QuestionOperatorSupport {
 
   given forEither[L, R]: QuestionOperatorSupport.Aux[Either[L, R], Left[L, Nothing], R] =
     new QuestionOperatorSupport[Either[L, R]] {
-      override type Failure = Left[L,Nothing]
+      override type Failure = Left[L, Nothing]
       override type Success = R
 
       override def decode[X <: Either[L, R]](value: X): Either[Left[L, Nothing], R] = {
         value match {
-          case Left(l) => Left(Left(l))
-          case Right(r) =>  Right(r)
+          case Left(l)  => Left(Left(l))
+          case Right(r) => Right(r)
         }
       }
     }
