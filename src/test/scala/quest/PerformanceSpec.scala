@@ -17,7 +17,6 @@ class PerformanceSpec extends TestBase {
   It should measure the overhead of the exception throwing inside quest.
    */
 
-
   def withFlatMap(in: Int, mod: Int): Option[Int] = {
     for {
       a <- sucMod(in, mod)
@@ -30,11 +29,11 @@ class PerformanceSpec extends TestBase {
 
   def withReturnAndPatternMatch(in: Int, mod: Int): Option[Int] = {
     val a = sucMod(in, mod) match {
-      case None => return None
+      case None    => return None
       case Some(a) => a
     }
     val b = sucMod(a, mod) match {
-      case None => return None
+      case None    => return None
       case Some(b) => b
     }
     sucMod(b, mod)
@@ -46,13 +45,11 @@ class PerformanceSpec extends TestBase {
     sucMod(b, mod)
   }
 
-
-
   inline def testIterations(size: Int, mod: Int, inline f: (Int, Int) => Option[Int], message: String): Unit = {
     val it = (0 until size).iterator
     val t0 = System.nanoTime()
     while (it.hasNext) {
-      val i = it.next()
+      val i      = it.next()
       val result = f(i, mod)
       if (i < mod - 3) {
         result shouldBe Some(i + 3)
@@ -61,7 +58,9 @@ class PerformanceSpec extends TestBase {
       }
     }
     val t1 = System.nanoTime()
-    println(s"${message}, iterations=${size}, mod=${mod} dt=${(t1 - t0).toDouble / 1_000_000_000}s, per call=${(t1 - t0).toDouble / size}ns")
+    println(
+      s"${message}, iterations=${size}, mod=${mod} dt=${(t1 - t0).toDouble / 1_000_000_000}s, per call=${(t1 - t0).toDouble / size}ns"
+    )
   }
 
   def testAll(size: Int, mod: Int): Unit = {

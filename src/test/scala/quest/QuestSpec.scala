@@ -1,5 +1,7 @@
 package quest
 
+import scala.util.boundary.break
+
 class QuestSpec extends TestBase {
 
   it should "work in a simple case" in {
@@ -12,7 +14,7 @@ class QuestSpec extends TestBase {
   }
 
   it should "support either" in {
-    val a: Either[String, Int] = Right(23)
+    val a: Either[String, Int]     = Right(23)
     val b: Either[String, Boolean] = Left("Bad")
 
     quest {
@@ -22,8 +24,9 @@ class QuestSpec extends TestBase {
   }
 
   it should "support either (success case with diverging error codes)" in {
-    val a: Either[String, Int] = Right(23)
+    val a: Either[String, Int]     = Right(23)
     val b: Either[String, Boolean] = Right(true)
+
     val res = quest {
       val x = a.?
       val y = b.?
@@ -57,9 +60,11 @@ class QuestSpec extends TestBase {
     override type Failure = Err
     override type Success = Int
 
-    override def decodeSuccess[X <: Base](result: X): Option[Int] = result match {
-      case e: Err => None
-      case ok: Ok => Some(ok.value)
+    override def decode[X <: Base](value: X): Either[Err, Int] = {
+      value match {
+        case e: Err => Left(e)
+        case ok: Ok => Right(ok.value)
+      }
     }
   }
 
@@ -84,7 +89,6 @@ class QuestSpec extends TestBase {
       bail(Err("Boom!"))
       Ok(42)
     }
-
 
     x shouldBe Err("Boom!")
   }

@@ -12,21 +12,8 @@ trait QuestionOperatorSupport[-T] {
   /** Failure Type. */
   type Failure
 
-  /** Split some result into sucess or failure. */
-  def decodeSuccess[X <: T](result: X): Option[Success]
-
-  /** Run f and returns successful values or throws EarlyExit with full value */
-  @throws[EarlyExit[_]]
-  inline def getOrEarlyExit[X <: T](value: X): Success = {
-    decodeSuccess(value).getOrElse {
-      earlyExit(value)
-    }
-  }
-
-  /** Issue early exit. */
-  inline def earlyExit[X <: T](value: X): Nothing = {
-    throw EarlyExit(value)
-  }
+  /** Split some result into success or failure. */
+  def decode[X <: T](value: X): Either[Failure, Success]
 }
 
 object QuestionOperatorSupport {
@@ -37,11 +24,14 @@ object QuestionOperatorSupport {
 
   given forEither[L, R]: QuestionOperatorSupport.Aux[Either[L, R], Left[L, Nothing], R] =
     new QuestionOperatorSupport[Either[L, R]] {
-      override type Failure = Left[L,Nothing]
+      override type Failure = Left[L, Nothing]
       override type Success = R
 
-      override def decodeSuccess[X <: Either[L, R]](result: X): Option[R] = {
-        result.toOption
+      override def decode[X <: Either[L, R]](value: X): Either[Left[L, Nothing], R] = {
+        value match {
+          case Left(l)  => Left(Left(l))
+          case Right(r) => Right(r)
+        }
       }
     }
 
@@ -50,8 +40,8 @@ object QuestionOperatorSupport {
       override type Failure = None.type
       override type Success = T
 
-      override def decodeSuccess[X <: Option[T]](result: X): Option[T] = {
-        result
+      override def decode[X <: Option[T]](value: X): Either[None.type, T] = {
+        value.toRight(None)
       }
     }
   }
