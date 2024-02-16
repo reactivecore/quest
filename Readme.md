@@ -34,6 +34,7 @@ def getUserAndPermissions(id: Int): Option[(String, List[String])] = quest {
 
 - `Option[T]`
 - `Either[L,R]`
+- `Try[T]`
 
 To use other types with the question operator, implement the `QuestionOperatorSupport` type class.
 
