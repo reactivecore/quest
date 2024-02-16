@@ -1,6 +1,7 @@
 package quest
 
 import scala.annotation.implicitNotFound
+import scala.util.{Failure, Try}
 
 /** Helper trait for implementing the Question-Operator syntax for different types. */
 @implicitNotFound("Could not find QuestionOperatorSupport for ${T}")
@@ -42,6 +43,17 @@ object QuestionOperatorSupport {
 
       override def decode[X <: Option[T]](value: X): Either[None.type, T] = {
         value.toRight(None)
+      }
+    }
+  }
+
+  given forTry[T]: QuestionOperatorSupport.Aux[Try[T], Failure[Nothing], T] = {
+    new QuestionOperatorSupport[Try[T]] {
+      override type Failure = scala.util.Failure[Nothing]
+      override type Success = T
+
+      override def decode[X <: Try[T]](value: X): Either[Failure, T] = {
+        value.toEither.left.map(Failure.apply)
       }
     }
   }

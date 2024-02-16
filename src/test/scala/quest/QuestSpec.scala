@@ -1,5 +1,6 @@
 package quest
 
+import scala.util.{Failure, Success, Try}
 import scala.util.boundary.break
 
 class QuestSpec extends TestBase {
@@ -34,6 +35,22 @@ class QuestSpec extends TestBase {
       Right(z)
     }
     res shouldBe Right(23)
+  }
+
+  it should "support try" in {
+    val a: Try[Int] = Success(10)
+    val b: Try[Int] = Success(32)
+
+    val rt          = new RuntimeException("BOOM")
+    val c: Try[Int] = Failure(rt)
+
+    val res = quest {
+      Success(a.? + b.?)
+    } shouldBe Success(42)
+
+    val res2 = quest {
+      Success(a.? + c.?)
+    } shouldBe Failure(rt)
   }
 
   it should "support bailing" in {
