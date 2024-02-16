@@ -11,7 +11,7 @@ extension [T](in: T) {
    */
   inline def ?[F, S](using support: QuestionOperatorSupport.Aux[T, F, S], label: Label[F]): S = {
     support.decode(in) match {
-      case Left(bad) => break(bad)
+      case Left(bad: F) => break(bad)
       case Right(ok) => ok
     }
   }
