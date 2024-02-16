@@ -59,3 +59,7 @@ Two helper classes simplify its use:
 
 - A small performance test measured an overhead of ~5ns per Failure return per Call in comparison to flatMap and return.
 - The `EarlyExit` doesn't carry a time-consuming stack trace.
+
+## Prior Art
+
+- Martin Ordersky: [Direct Style Scala (Scalar 2023)](https://www.youtube.com/watch?v=0Fm0y4K4YO8)
