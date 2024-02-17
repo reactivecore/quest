@@ -40,7 +40,7 @@ To use other types with the question operator, implement the `QuestionOperatorSu
 
 ## How it works
 
-The quest block leverages `scala.util.boundary` which uses exceptions for early exit. In cases of failure, an `scala.util.boundary.Break` exception is thrown and caught by the `scala.boundary.apply` function.
+The quest block leverages `scala.util.boundary` which uses exceptions for early exit. In cases of failure, an `scala.util.boundary.Break` exception is thrown and caught by the `scala.boundary.apply` function. (Note that this is optimised to a labelled jump, instead of exception, when no intermediate closures are in between `?` and `quest`)
 
 
 Two helper classes simplify its use:
