@@ -17,7 +17,7 @@ inline def quest[T](f: Label[T] ?=> T): T = {
 extension [T](in: T) {
 
   /**
-   * Return the the success value or return the quest-block with the error value.
+   * Return the success value or return the quest-block with the error value.
    *
    * Must be used inside a quest block
    */
